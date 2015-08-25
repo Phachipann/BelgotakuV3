@@ -8,19 +8,28 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Validator;
-use App\User;
+use App\Model\User;
 use Auth;
 
 class WebSiteController extends Controller
 {
+    /**
+    * Page index
+    */
     function index(){
     	return view('index');
     }
 
+    /**
+    * Page d'inscription
+    */
     function register(){
     	return view('register');
     }
 
+    /**
+    * Inscription à un nouvel utilisateur
+    */
     function create(Request $request){
     	$validator = Validator::make($request->all(), [
     		'name'		=>	'required|max:255|unique:users',
@@ -38,13 +47,19 @@ class WebSiteController extends Controller
         	'email'		=>	$request['email'],
         	'password'	=>	bcrypt($request['password'])
         ]);
-        return 'Bravo, vous êtes inscrit à Belgotaku';
+        return redirect('/');
     }
 
+    /**
+    * Page de connexion
+    */
     function getLogin(){
     	return view('login');
     }
 
+    /**
+    * Connexion de l'utilisateur
+    */
     function postLogin(Request $request){
     	if(Auth::attempt(['name' => $request['name'], 'password' => $request['password']], $request['remember'])){
     		return redirect('/')
@@ -55,19 +70,31 @@ class WebSiteController extends Controller
             ->withErrors("Nom d'utilisateur ou mot de passe incorrect");
     }
 
+    /**
+    * Déconnexion de l'utilisateur
+    */
     function logout(){
         Auth::logout();
         return back();
     }
 
+    /**
+    * About page
+    */
     function about(){
         return "About page";
     }
 
+    /**
+    * Contact page
+    */
     function contact(){
         return "Contact page";
     }
 
+    /**
+    * Page de profil de l'utilisateur connectés
+    */
     function profil(){
         return User::find(Auth::user()->id);
     }
