@@ -21,4 +21,8 @@ class Sections extends Model
 	function up(){
 		return $this->belongsTo('App\Model\Forum\Sections', 'sections_id', 'id');
 	}
+
+	function topics(){
+		return $this->hasMany('App\Model\Forum\Topics');
+	}
 }

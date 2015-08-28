@@ -13,7 +13,11 @@ class Replies extends Model
 
     protected $fillable = ['content', 'topics_id', 'users_id'];
 
-    function section(){
-    	return $this->belongsTo('App\Model\Forum\Sections');
+    function topic(){
+    	return $this->belongsTo('App\Model\Forum\Topics');
+    }
+
+    function user(){
+    	return $this->belongsTo('App\Model\User', 'users_id', 'id');
     }
 }

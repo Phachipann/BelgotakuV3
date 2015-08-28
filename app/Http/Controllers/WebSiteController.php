@@ -17,14 +17,14 @@ class WebSiteController extends Controller
     * Page index
     */
     function index(){
-    	return view('index');
+    	return view('website.index');
     }
 
     /**
     * Page d'inscription
     */
     function register(){
-    	return view('register');
+    	return view('website.register');
     }
 
     /**
@@ -37,9 +37,9 @@ class WebSiteController extends Controller
     		'password'	=>	'required|max:60|confirmed']);
 
     	if ($validator->fails()) {
-            return redirect('register')
-                        ->withErrors($validator)
-                        ->withInput();
+            return back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
         User::create([
@@ -54,7 +54,7 @@ class WebSiteController extends Controller
     * Page de connexion
     */
     function getLogin(){
-    	return view('login');
+    	return view('website.login');
     }
 
     /**
@@ -62,8 +62,7 @@ class WebSiteController extends Controller
     */
     function postLogin(Request $request){
     	if(Auth::attempt(['name' => $request['name'], 'password' => $request['password']], $request['remember'])){
-    		return redirect('/')
-                ->with('name', $request['name']);
+    		return redirect('/');
     	}
         return back()
             ->withInput()

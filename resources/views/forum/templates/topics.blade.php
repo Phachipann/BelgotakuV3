@@ -1,14 +1,16 @@
 <div class="topics">
-	<h2>Topics</h2>
+	@if(Auth::check())
+		<a href="{{URL::route('forum.section.create.get', $forum->slug)}}" class="btn btn-primary">Commencer un sujet</a>
+	@endif
 	<table class="table">
-		@foreach($topics as $topic)
+		@foreach($forum->topics as $topic)
 		<tr>
 			<td class="unread">
 				<span class="glyphicon glyphicon-comment"></span>
 			</td>
 
 			<td class="content">
-				<h4><a href="{{URL::current()}}/{{$topic->slug}}">{{$topic->subject}}</a></h4>
+				<h4><a href="{{URL::route('forum.topic.show', $topic->slug)}}">{{$topic->subject}}</a></h4>
 			</td>
 
 			<td class="preview">

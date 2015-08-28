@@ -33,21 +33,15 @@ class Forum extends Migration
             $table->string('slug');
             $table->integer('users_id')->unsigned();
             $table->integer('sections_id')->unsigned();
-            $table->integer('last_users_id')->unsigned();
-            $table->integer('last_replies_id')->unsigned();
+            $table->integer('last_users_id');
+            $table->integer('last_replies_id');
             $table->timestamps();
-
-            $table->foreign('sections_id')
-                ->references('id')->on('sections');
 
             $table->foreign('users_id')
                 ->references('id')->on('users');
 
-            $table->foreign('last_users_id')
-                ->references('id')->on('users');
-
-            $table->foreign('last_replies_id')
-                ->references('id')->on('users');
+            $table->foreign('sections_id')
+                ->references('id')->on('sections');            
         });
 
         //Crée la table replies

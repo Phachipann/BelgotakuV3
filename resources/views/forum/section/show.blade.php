@@ -14,6 +14,6 @@
 	</ol>
 	<h1>{{$forum->name}}</h1>
 	<h2>Sous-forum</h2>
-	@include('forum.subForum')
-	@include('forum.topics')
+	@include('forum.templates.subForum')
+	@include('forum.templates.topics')
 @endsection
