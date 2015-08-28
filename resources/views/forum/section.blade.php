@@ -1,16 +1,18 @@
 @extends('template')
 
 @section('title')
-	{{$section->name}}
+	{{$forum->name}}
 @endsection
 
 @section('content')
-	<h1>{{$section->name}}</h1>
-	<div>
-		<ul>
-			@foreach($section->categories as $category)
-				<li><a href="/forum/{{$section->slug}}/{{$category->slug}}">{{$category->name}}</a></li>
-			@endforeach
-		</ul>	
-	</div>
+	<ol class="breadcrumb">
+		<li><a href="{{URL::route('forum.index')}}">Forum</a></li>
+		@foreach($breadcrumbs as $breadcrumb)
+			<li><a href="{{URL::route('forum.section.show', $breadcrumb->slug)}}">{{$breadcrumb->name}}</a></li>
+		@endforeach
+		<li class="active">{{$forum->name}}</li>
+	</ol>
+	<h1>{{$forum->name}}</h1>
+	<h2>Sous-forum</h2>
+	@include('forum.subForum')
 @endsection

@@ -19,35 +19,11 @@ class Forum extends Migration
             $table->string('slug');
             $table->string('description');
             $table->string('priority');
-            $table->timestamps();
-        });
-
-        //Crée la table catégories
-        Schema::create('categories', function(Blueprint $table){
-            $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-            $table->string('description');
-            $table->string('priority');
-            $table->integer('sections_id')->unsigned();
+            $table->integer('sections_id')->unsigned()->nullable();
             $table->timestamps();
 
             $table->foreign('sections_id')
                 ->references('id')->on('sections');
-        });
-
-        //Crée la table sub_categories
-        Schema::create('sub_categories', function(Blueprint $table){
-            $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-            $table->string('description');
-            $table->string('priority');
-            $table->integer('categories_id')->unsigned();
-            $table->timestamps();
-
-            $table->foreign('categories_id')
-                ->references('id')->on('categories');
         });
 
         //Crée la table topics
@@ -56,13 +32,21 @@ class Forum extends Migration
             $table->string('subject');
             $table->string('slug');
             $table->integer('users_id')->unsigned();
-            $table->integer('categories_id')->unsigned();
+            $table->integer('sections_id')->unsigned();
+            $table->integer('last_users_id')->unsigned();
+            $table->integer('last_replies_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('categories_id')
-                ->references('id')->on('categories');
+            $table->foreign('sections_id')
+                ->references('id')->on('sections');
 
             $table->foreign('users_id')
+                ->references('id')->on('users');
+
+            $table->foreign('last_users_id')
+                ->references('id')->on('users');
+
+            $table->foreign('last_replies_id')
                 ->references('id')->on('users');
         });
 
@@ -91,8 +75,6 @@ class Forum extends Migration
     {
         Schema::drop('replies');
         Schema::drop('topics');
-        Schema::drop('sub_categories');
-        Schema::drop('categories');
         Schema::drop('sections');
     }
 }

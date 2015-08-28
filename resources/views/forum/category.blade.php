@@ -1,9 +1,12 @@
 @extends('template')
 
 @section('title')
-	{{$category->name}}
+	{{$forum->name}}
 @endsection
 
 @section('content')
-	<h1>{{$category->name}}</h1>
+	<h1>{{$forum->name}}</h1>
+	<a href="{{$forum->slug}}/create" class="btn btn-primary">Commencer un sujet</a>
+	@include('forum.subForum')
+	@include('forum.topics')
 @endsection

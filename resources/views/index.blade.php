@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-	<textarea name="editor1" onclick="show()"></textarea>
+	<textarea class="form-control" rows="12" name="editor1" onclick="show()"></textarea>
         <script>
         	function show(){
             	CKEDITOR.replace( 'editor1' );
