@@ -1,5 +1,5 @@
 <div class="sub-forum">
-	<table class="table">
+	<table>
 		@foreach($forum->subForums as $subForum)
 			<tr class="category">
 				<td class="unread">

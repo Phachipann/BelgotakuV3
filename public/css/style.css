@@ -2,10 +2,21 @@
 	color: red;
 }
 
-.content{
-	border: 1px black solid;
+table {
+	width : 100%;
+	border-collapse: collapse;
+	border: 1px solid black;
 }
 
-.avatar{
-	border: 1px black solid;
+table tr td{
+	border: 1px solid black;
+}
+
+td{
+	padding: 10px;
+}
+
+.left: {
+	width: 100%;
+	color: red;
 }

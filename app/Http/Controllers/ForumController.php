@@ -52,11 +52,12 @@ class ForumController extends Controller
 	* Crée un nouveau topic(post)
 	*/
 	function createTopicPost($section, Request $request){
+		//Vérification de la form
 		$validator = Validator::make($request->all(),[
 			'subject'	=>	'required',
 			'content'	=>	'required'
 		]);
-
+		//Retour en cas d'erreur
 		if($validator->fails()){
 			return back()
 				->withErrors($validator)
@@ -77,19 +78,33 @@ class ForumController extends Controller
 			'topics_id'			=>	$topic->id,
 			'users_id'			=>	Auth::user()->id
 		]);
-
+		//Mets à jour la table topic (dernier message envoyé)
 		$change = Topics::find($topic->id);
 		$change->last_replies_id = $reply->id;
 		$change->save();
 		return redirect(URL::route('forum.section.show', $section));
 	}
 
+	/**
+	* Affiche le topic
+	*/
 	function showTopic($topic){
-		$topic = Topics::where('slug', $topic)->first();
+		$this->topic = Topics::where('slug', $topic)->first();
+		$copy = $this->topic->section;
+		$breadcrumbs = array();
+		array_unshift($breadcrumbs, $copy);
+		while(!is_null($copy->up)){
+			$copy = $copy->up;
+			array_unshift($breadcrumbs, $copy);
+		} 
 		return view('forum.topics.show')
-			->with('topic', $topic);
+			->with('topic', $this->topic)
+			->with('breadcrumbs', $breadcrumbs);
 	}
 
+	/**
+	* Répond à un topic
+	*/
 	function reply($topic, Request $request){
 		$idTopic = Topics::where('slug', $topic)->first();
 		$reply = Replies::create([
@@ -98,6 +113,7 @@ class ForumController extends Controller
 			'users_id'	=>	Auth::user()->id
 		]);
 		//$idTopic->last_replies_id = $reply->id;
+		//$idTopic->last_users_id = Auth::user()->id
 		//$idTopic->save();
 		return back();
 	}

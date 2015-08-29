@@ -25,6 +25,6 @@ class Topics extends Model
 	}
 
 	function section(){
-		return $this->belongsTo('App\Model\Forum\Sections');
+		return $this->belongsTo('App\Model\Forum\Sections', 'sections_id', 'id');
 	}
 }

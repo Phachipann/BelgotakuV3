@@ -5,17 +5,29 @@
 @endsection
 
 @section('content')
+	<ol class="breadcrumb">
+		<li><a href="{{URL::route('forum.index')}}">Forum</a></li>
+		@foreach($breadcrumbs as $breadcrumb)
+			<li><a href="{{URL::route('forum.section.show', $breadcrumb->slug)}}">{{$breadcrumb->name}}</a></li>
+		@endforeach
+		<li class="active">{{$topic->subject}}</li>
+	</ol>
 	<h1>{{$topic->subject}}</h1>
-	@foreach($topic->replies as $reply)
-		<div class="replies row">
-			<div class="avatar col-sm-2">
-				<h2>{{$reply->user->name}}</h2>
-			</div>
+	<table>
+		@foreach($topic->replies as $reply)
+			<tr class="post row">
+				<td class="left">
+					<h4>{{$reply->user->name}}</h4> <br>{{$reply->created_at}}
+				</td>
 
-			<div class="content col-sm-10">
-				{!!$reply->content!!}
-			</div>
-		</div>
-	@endforeach
-	@include('forum.templates.ckeditor')
+				<td class="right">
+					{!!$reply->content!!}
+				</td>
+			</tr>
+		@endforeach
+	</table>
+	<br>
+	@if(Auth::check())
+		@include('forum.templates.ckeditor')
+	@endif
 @endsection
