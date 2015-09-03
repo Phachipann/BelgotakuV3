@@ -1,3 +1,4 @@
+<!-- Affiche les sous forums (template) -->
 <div class="sub-forum">
 	<table>
 		@foreach($forum->subForums as $subForum)
@@ -7,13 +8,13 @@
 				</td>
 					
 				<td>
-					<h3><a href="{{URL::route('forum.section.show', $subForum->slug)}}">{{$subForum->name}}</a></h3>
+					<h4><a href="{{URL::route('forum.section.show', $subForum->slug)}}">{{$subForum->name}}</a></h4>
 					<ul class="list-inline">
 						@foreach($subForum->subForums as $subSubForum)
 							<li>
-								<h4>
+								<h5>
 									<a href="{{URL::route('forum.section.show', $subSubForum->slug)}}">{{$subSubForum->name}}</a>
-								</h4>
+								</h5>
 							</li>,
 						@endforeach
 					</ul>

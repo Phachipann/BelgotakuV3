@@ -6,14 +6,11 @@ table {
 	width : 100%;
 	border-collapse: collapse;
 	border: 1px solid black;
+	margin-right: 5px;
 }
 
 table tr td{
 	border: 1px solid black;
-}
-
-td{
-	padding: 10px;
 }
 
 .left: {

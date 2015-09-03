@@ -1,38 +1,20 @@
 @extends('template')
 
 @section('title')
-	Nouveau sujet
+	Création d'une nouvelle Section
 @endsection
 
 @section('content')
-	<h1>Nouveau sujet</h1>
-	@if (count($errors) > 0)
-	    <div class="alert alert-danger">
-	        <ul>
-	            @foreach ($errors->all() as $error)
-	                <li>{{ $error }}</li>
-	            @endforeach
-	        </ul>
-	    </div>
-	@endif
 	<form action="create" method="POST">
 		{!! csrf_field() !!}
 		<div class="form-group">
-			<label for="name">Le titre du sujet</label>
-			<input type="text" name="subject" id="" class="form-control" value="{{old('subject')}}">
+			<label for="parent">Parent</label>
+			<select name="parent" id="" class="form-control">
+				
+			</select>
 		</div>
-
 		<div class="form-group">
-			<textarea name="content" class="form-control" value="{{old('content')}}"></textarea>
-		</div>
-
-		<div class="form-group">
-			<input type="submit" value="Envoyer ce nouveau sujet"> ou
-			<a href="{{URL::previous()}}">Annuler</a>
+			<input type="submit" value="Valider" class="btn btn-success">
 		</div>
 	</form>
-
-	<script>
-		CKEDITOR.replace( 'content' );
-	</script>
 @endsection

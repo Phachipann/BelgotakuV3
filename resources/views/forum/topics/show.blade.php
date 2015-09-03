@@ -23,6 +23,11 @@
 				<td class="right">
 					{!!$reply->content!!}
 				</td>
+				
+				<td>
+					<a href="{{URL::route('forum.topic.edit.get', [$topic->slug, $reply->id])}}" class="btn btn-success">Editer ce message</a>
+					<a href="{{URL::route('forum.topic.destroy', [$topic->slug, $reply->id])}}" class="btn btn-danger">Supprimer ce message</a>
+				</td>
 			</tr>
 		@endforeach
 	</table>

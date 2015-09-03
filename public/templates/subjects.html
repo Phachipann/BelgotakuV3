@@ -1,0 +1,4 @@
+<div ng-controller="SubjectsController" ng-repeat="subject in subjects">
+	<h2><a href="forum/topic/{{subject.slug}}">{{subject.subject}}</a></h2>
+	<div ng-bind-html="subject.replies[0].content | unsafe"></div>
+</div>

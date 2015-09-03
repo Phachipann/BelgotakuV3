@@ -11,6 +11,8 @@ class Sections extends Model
 	*/
 	protected $table = 'sections';
 
+	protected $fillable = ['name', 'slug', 'description', 'priority', 'sections_id'];
+
 	/**
 	* Relation sections à la table sections
 	*/

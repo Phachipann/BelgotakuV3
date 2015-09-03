@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+	<!-- breadcrumb -->
 	<ol class="breadcrumb">
 		<li><a href="{{URL::route('forum.index')}}">Forum</a></li>
 		@foreach($breadcrumbs as $breadcrumb)
@@ -12,8 +13,14 @@
 		@endforeach
 		<li class="active">{{$forum->name}}</li>
 	</ol>
+
+	<!-- Affiche les sous forums -->
 	<h1>{{$forum->name}}</h1>
-	<h2>Sous-forum</h2>
-	@include('forum.templates.subForum')
+	<div class="panel panel-primary">
+		<div class="panel-heading">Sous-forum</div>
+		@include('forum.templates.subForum')
+	</div>
+
+	<!-- Affiche les topics -->
 	@include('forum.templates.topics')
 @endsection

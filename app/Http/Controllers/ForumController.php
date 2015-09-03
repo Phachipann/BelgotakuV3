@@ -30,6 +30,8 @@ class ForumController extends Controller
 	*/
 	function showSection($section){
 		$this->section = Sections::where('slug', $section)->first();
+
+		//Crée le breadcrumb
 		$copy = $this->section;
 		$breadcrumbs = array();
 		while(!is_null($copy->up)){
@@ -45,7 +47,7 @@ class ForumController extends Controller
 	* Crée un nouveau topic(get)
 	*/
 	function createTopicGet(){
-		return view('forum.section.create');
+		return view('forum.topics.create');
 	}
 
 	/**
@@ -57,6 +59,7 @@ class ForumController extends Controller
 			'subject'	=>	'required',
 			'content'	=>	'required'
 		]);
+
 		//Retour en cas d'erreur
 		if($validator->fails()){
 			return back()
@@ -64,6 +67,7 @@ class ForumController extends Controller
 				->withInput();
 		}
 
+		//Ajoute le topic et le post à la base de données 
 		$lastId = Topics::all()->count() + 1;
 		$topic = Topics::create([
 			'subject'			=>	$request->subject,
@@ -78,11 +82,12 @@ class ForumController extends Controller
 			'topics_id'			=>	$topic->id,
 			'users_id'			=>	Auth::user()->id
 		]);
+
 		//Mets à jour la table topic (dernier message envoyé)
 		$change = Topics::find($topic->id);
 		$change->last_replies_id = $reply->id;
 		$change->save();
-		return redirect(URL::route('forum.section.show', $section));
+		return redirect()->route('forum.section.show', $section);
 	}
 
 	/**
@@ -90,6 +95,8 @@ class ForumController extends Controller
 	*/
 	function showTopic($topic){
 		$this->topic = Topics::where('slug', $topic)->first();
+		
+		//Crée le breadcrumb
 		$copy = $this->topic->section;
 		$breadcrumbs = array();
 		array_unshift($breadcrumbs, $copy);
@@ -97,6 +104,7 @@ class ForumController extends Controller
 			$copy = $copy->up;
 			array_unshift($breadcrumbs, $copy);
 		} 
+		
 		return view('forum.topics.show')
 			->with('topic', $this->topic)
 			->with('breadcrumbs', $breadcrumbs);
@@ -112,9 +120,48 @@ class ForumController extends Controller
 			'topics_id'	=>	$idTopic->id,
 			'users_id'	=>	Auth::user()->id
 		]);
-		//$idTopic->last_replies_id = $reply->id;
-		//$idTopic->last_users_id = Auth::user()->id
-		//$idTopic->save();
+
+		//Mets à jour le dernier message envoyé
+		$idTopic->last_replies_id = $reply->id;
+		$idTopic->last_users_id = Auth::user()->id;
+		$idTopic->save();
 		return back();
+	}
+
+	/**
+	* Permet d'éditer un message (get)
+	*/
+	function getEdit($topic, $reply){
+		$reply = Replies::find($reply);
+		return view('forum.topics.edit')
+			->with('topic', $topic)
+			->with('reply', $reply);
+	}
+
+	function postEdit($topic, $reply, Request $request){
+		$reply = Replies::find($reply);
+		$reply->content = $request->content;
+		$reply->save();
+		return redirect()->route('forum.topic.show', $topic);
+	}
+
+	/**
+	* Efface un message
+	*/
+	function destroy($reply){
+		$reply = Replies::find($reply)->delete();
+		return back();
+	}
+
+	/**
+	* Crée une nouvelle section
+	*/
+	function createSectionGet(){
+		return Sections::with('subForums')->whereNull('sections_id')->get();
+		return view('forum.section.create');
+	}
+
+	function createSectionPost(){
+		return "Crée";
 	}
 }

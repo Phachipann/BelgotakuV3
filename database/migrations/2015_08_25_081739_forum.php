@@ -53,7 +53,8 @@ class Forum extends Migration
             $table->timestamps();
 
             $table->foreign('topics_id')
-                ->references('id')->on('topics');
+                ->references('id')->on('topics')
+                ->onDelete('cascade');
 
             $table->foreign('users_id')
                 ->references('id')->on('users');

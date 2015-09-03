@@ -1,0 +1,4 @@
+<div ng-controller="MessagesController" ng-repeat="message in messages">
+	<h2><a href="/forum/topic/{{message.topic.slug}}">{{message.topic.subject}}</a></h2>
+	<div ng-bind-html="message.content | unsafe"></div>
+</div>

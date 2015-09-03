@@ -74,7 +74,7 @@ class WebSiteController extends Controller
     */
     function logout(){
         Auth::logout();
-        return back();
+        return redirect('/');
     }
 
     /**
@@ -89,12 +89,5 @@ class WebSiteController extends Controller
     */
     function contact(){
         return "Contact page";
-    }
-
-    /**
-    * Page de profil de l'utilisateur connectés
-    */
-    function profil(){
-        return User::find(Auth::user()->id);
     }
 }

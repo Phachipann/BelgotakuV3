@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+	<!-- Test -->
 	<textarea class="form-control" rows="12" name="editor1" onclick="show()"></textarea>
         <script>
         	function show(){
