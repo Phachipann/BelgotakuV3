@@ -21,10 +21,14 @@ class Topics extends Model
 	}
 
 	function user(){
-		return $this->belongsTo('App\Model\User');
+		return $this->belongsTo('App\Model\User', 'users_id');
 	}
 
 	function section(){
 		return $this->belongsTo('App\Model\Forum\Sections', 'sections_id', 'id');
+	}
+
+	function lastUser(){
+		return $this->belongsTo('App\Model\User', 'last_users_id');
 	}
 }

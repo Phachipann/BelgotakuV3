@@ -13,24 +13,25 @@
 		<li class="active">{{$topic->subject}}</li>
 	</ol>
 	<h1>{{$topic->subject}}</h1>
-	<table>
-		@foreach($topic->replies as $reply)
-			<tr class="post row">
-				<td class="left">
-					<h4>{{$reply->user->name}}</h4> <br>{{$reply->created_at}}
-				</td>
+	<div class="panel panel-primary">
+		<div class="panel-heading">Il y a {{$topic->replies->count()}} réponses</div>
+			<div class="panel panel-info">
+			@foreach($topic->replies as $reply)		
+				<div class="panel-heading">{{$reply->user->name}}</div>
+				<table class="table">
+					<tr>
+						<td class="left">
+							{{$reply->created_at}}
+						</td>
 
-				<td class="right">
-					{!!$reply->content!!}
-				</td>
-				
-				<td>
-					<a href="{{URL::route('forum.topic.edit.get', [$topic->slug, $reply->id])}}" class="btn btn-success">Editer ce message</a>
-					<a href="{{URL::route('forum.topic.destroy', [$topic->slug, $reply->id])}}" class="btn btn-danger">Supprimer ce message</a>
-				</td>
-			</tr>
-		@endforeach
-	</table>
+						<td class="right">
+							{!!$reply->content!!}
+						</td>
+					</tr>
+				</table>
+			@endforeach
+		</div>
+	</div>
 	<br>
 	@if(Auth::check())
 		@include('forum.templates.ckeditor')

@@ -48,7 +48,7 @@
 		    	<ul class="nav navbar-nav navbar-right">
 		    		@if(Auth::check())
 		    			<!-- Affiche si l'utilisateur est connecté -->
-		    			<li><a href="messages"><span class="glyphicon glyphicon-envelope"></span></a></li>
+		    			<li><a href="{{URL::route('messages.index')}}"><span class="glyphicon glyphicon-envelope"></span></a></li>
 		    			<li><a href="notifies"><span class="glyphicon glyphicon-bell"></span></a></li>
 		    			<li><p class="navbar-text">Bienvenue <a href="{{URL::route('profile.index')}}">{{Auth::user()->name}}</a></p></li>
 		    			<li><a href="{{URL::route('logout')}}">Déconnexion</a></li>

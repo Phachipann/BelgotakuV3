@@ -26,6 +26,9 @@ Route::get('logout', ['as'=>'logout', 'uses'=>'WebSiteController@logout']);
 Route::get('about', ['as'=>'about', 'uses'=>'WebSiteController@about']);
 Route::get('contact', ['as'=>'contact', 'uses'=>'WebSiteController@contact']);
 
+Route::resource('messages', 'PMController');
+Route::get('getUsers', 'PMController@getUsers');
+
 //Profil page
 Route::group(['prefix'=>'profile', 'as'=>'profile.'], function(){
 	Route::get('', ['as'=>'index', 'uses'=>'ProfileController@index']);

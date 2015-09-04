@@ -39,5 +39,13 @@
 		$http.get('profile/badges').success(function($data){
 			$scope.badges = $data;
 		});
-	}])
+	}]);
+
+	app.controller('UsersController', ['$scope', '$http', function($scope, $http){
+		$http.get('/getUsers').success(function($data){
+			$scope.users = $data;
+			$scope.name = null;
+			console.log($data);
+		});
+	}]);
 }());

@@ -14,6 +14,7 @@
 
 					<td class="content">
 						<h4><a href="{{URL::route('forum.topic.show', $topic->slug)}}">{{$topic->subject}}</a></h4>
+						Débuté par {{$topic->user->name}}, {{$topic->created_at->format('d/m/Y')}}
 					</td>
 
 					<td class="preview">
@@ -28,7 +29,7 @@
 					</td>
 
 					<td class="lastpost">
-						Dernier message
+						{{$topic->lastUser->name}}
 					</td>
 				</tr>
 			@endforeach

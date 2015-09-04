@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Auth;
-use App\Model\Forum\Topics;
-use App\Model\Forum\Replies;
-use App\Model\Badges;
+use App\Model\User;
+use Validator;
+use DB;
 
-class ProfileController extends Controller
+use App\Model\pm\PrivateMessage;
+use App\Model\pm\PMReplies;
+use Auth;
+
+class PMController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,24 +23,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        if(!Auth::check()) return redirect()->route('login');
-        $user = Auth::user();
-        return view('profile.index')
-            ->with('user', $user);        
-    }
-
-    public function getSubjects(){
-        return Topics::with('replies')->where('users_id', Auth::user()->id)
-            ->orderBy('created_at', 'desc')->get();
-    }
-
-    public function getMessages(){
-        return Replies::with('topic')->where('users_id', Auth::user()->id)
-            ->orderBy('created_at', 'desc')->get();
-    }
-
-    public function getBadges(){
-        return Auth::user()->badges;
+        return view('messages.index');
     }
 
     /**
@@ -47,7 +33,7 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        //
+        return view('messages.create');
     }
 
     /**
@@ -58,7 +44,37 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'      =>  'required',
+            'subject'   =>  'required',
+            'content'   =>  'required'
+        ]);
+
+        if($validator->fails()){
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        
+        $user = User::where('name', $request->name)->get();
+        $id = PrivateMessage::all()->count() + 1;
+        $pm = PrivateMessage::create([
+            'subject'   =>  $request->subject,
+            'slug'      =>  str_slug($id . ' ' . $request->subject),
+            'users_id'  =>  Auth::user()->id
+        ]);
+
+        PMReplies::create([
+            'content'   =>  $request->content,
+            'pm_id'     =>  $pm->id,
+            'users_id'  =>  Auth::user()->id
+        ]);
+
+        DB::table('pm_destination')->insert([
+            'pm_id'     =>  $pm->id,
+            'users_id'  =>  Auth::user()->id
+        ]);
+        return back();
     }
 
     /**
@@ -104,5 +120,9 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getUsers(){
+        return User::all();
     }
 }

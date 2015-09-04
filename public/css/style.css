@@ -13,7 +13,6 @@ table tr td{
 	border: 1px solid black;
 }
 
-.left: {
-	width: 100%;
-	color: red;
+.left {
+	width: 20%;
 }

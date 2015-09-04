@@ -20,7 +20,7 @@
 	<script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script>
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/forum.css">
-	<script src="js/app.js"></script>
+	<script src="/js/app.js"></script>
 	<title>@yield('title')</title>
 </head>
 <body>
