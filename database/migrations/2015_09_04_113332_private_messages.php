@@ -16,38 +16,25 @@ class PrivateMessages extends Migration
             $table->increments('id');
             $table->string('subject');
             $table->string('slug');
-            $table->integer('users_id')->unsigned();
+            $table->integer('users_id');
+            $table->string('last_user');
+            $table->integer('last_reply')->nullable();
             $table->timestamps();
-
-            $table->foreign('users_id')
-                ->references('id')->on('users');
         });
 
         Schema::create('pm_replies', function(Blueprint $table){
             $table->increments('id');
             $table->string('content');
-            $table->integer('pm_id')->unsigned();
-            $table->integer('users_id')->unsigned();
+            $table->integer('pm_id');
+            $table->integer('users_id');
             $table->timestamps();
-
-            $table->foreign('pm_id')
-                ->references('id')->on('pm_title');
-
-            $table->foreign('users_id')
-                ->references('id')->on('users');
         });
 
         Schema::create('pm_destination', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('pm_id')->unsigned();
-            $table->integer('users_id')->unsigned();
+            $table->integer('pm_id');
+            $table->integer('users_id');
             $table->timestamps();
-
-            $table->foreign('pm_id')
-                ->references('id')->on('pm_title');
-
-            $table->foreign('users_id')
-                ->references('id')->on('users');
         });
     }
 
@@ -61,7 +48,5 @@ class PrivateMessages extends Migration
         Schema::drop('pm_destination');
         Schema::drop('pm_replies');
         Schema::drop('pm_title');
-        
-        
     }
 }

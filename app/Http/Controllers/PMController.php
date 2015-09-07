@@ -12,6 +12,7 @@ use DB;
 
 use App\Model\pm\PrivateMessage;
 use App\Model\pm\PMReplies;
+use App\Model\pm\PMDestination;
 use Auth;
 
 class PMController extends Controller
@@ -23,7 +24,9 @@ class PMController extends Controller
      */
     public function index()
     {
-        return view('messages.index');
+        $messages = PMDestination::where('users_id', Auth::user()->id)->orderBy('updated_at', 'desc')->get();
+        return view('messages.index')
+            ->with('messages', $messages);
     }
 
     /**
@@ -70,11 +73,16 @@ class PMController extends Controller
             'users_id'  =>  Auth::user()->id
         ]);
 
-        DB::table('pm_destination')->insert([
-            'pm_id'     =>  $pm->id,
-            'users_id'  =>  Auth::user()->id
+        PMDestination::create([
+            'users_id'  =>  Auth::user()->id,
+            'pm_id'     =>  $pm->id
         ]);
-        return back();
+
+        PMDestination::create([
+            'users_id'  =>  User::where('name', $request->name)->first()->id,
+            'pm_id'     =>  $pm->id
+        ]);
+        return redirect()->route('messages.index');
     }
 
     /**
@@ -85,7 +93,9 @@ class PMController extends Controller
      */
     public function show($id)
     {
-        //
+        $message = PrivateMessage::where('slug', $id)->first();
+        return view('messages.show')
+            ->with('message', $message);
     }
 
     /**
@@ -124,5 +134,27 @@ class PMController extends Controller
 
     public function getUsers(){
         return User::all();
+    }
+
+    public function reply($id, Request $request){
+        $pm = PrivateMessage::where('slug', $id)->first();
+        $validator = Validator::make($request->all(), [
+            'content'   =>  'required'
+        ]);
+
+        if($validator->fails()){
+            return back();
+        }
+
+        PMReplies::create([
+            'content'   =>  $request->content,
+            'pm_id'     =>  $pm->id,
+            'users_id'  =>  Auth::user()->id
+        ]);
+
+        $pm->last_user = Auth::user()->name;
+        $pm->save();
+
+        return redirect()->route('messages.show', $id);
     }
 }

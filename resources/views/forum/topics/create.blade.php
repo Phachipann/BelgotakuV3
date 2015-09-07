@@ -16,7 +16,7 @@
 	        </ul>
 	    </div>
 	@endif
-	<form method="POST">
+	<form method="POST" action="{{URL::route('forum.section.create.topic', $section)}}">
 		{!! csrf_field() !!}
 		<div class="form-group">
 			<label for="name">Le titre du sujet</label>

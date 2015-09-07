@@ -3,11 +3,11 @@
 	<table>
 		@foreach($forum->subForums as $subForum)
 			<tr class="category">
-				<td class="unread">
+				<td class="unread col-md-1">
 					<span class="glyphicon glyphicon-comment"></span>
 				</td>
 					
-				<td>
+				<td class="col-md-7">
 					<h4><a href="{{URL::route('forum.section.show', $subForum->slug)}}">{{$subForum->name}}</a></h4>
 					<ul class="list-inline">
 						@foreach($subForum->subForums as $subSubForum)
@@ -20,14 +20,7 @@
 					</ul>
 				</td>
 				
-				<td class="statistics">
-					<ul class="list-unstyled">
-						<li>sujets</li>
-						<li>réponses</li>
-					</ul>
-				</td>
-				
-				<td class="lastpost">
+				<td class="lastpost col-md-4">
 					Dernier message
 				</td>
 			</tr>

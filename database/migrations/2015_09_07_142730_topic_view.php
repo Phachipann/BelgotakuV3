@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Badges extends Migration
+class TopicView extends Migration
 {
     /**
      * Run the migrations.
@@ -12,19 +12,17 @@ class Badges extends Migration
      */
     public function up()
     {
-        Schema::create('badges', function(Blueprint $table){
+        Schema::create('users_topic_read', function(Blueprint $table){
             $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-            $table->string('description');
-            $table->string('url');
+            $table->integer('users_id');
+            $table->integer('topics_id');
             $table->timestamps();
         });
 
-        Schema::create('users_badges', function(Blueprint $table){
+        Schema::create('topic_views', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('users_id');
-            $table->integer('badges_id');
+            $table->integer('topics_id');
+            $table->integer('views');
             $table->timestamps();
         });
     }
@@ -36,8 +34,7 @@ class Badges extends Migration
      */
     public function down()
     {
-        Schema::drop('users_badges');
-        Schema::drop('badges');
-        
+        Schema::drop('users_topic_read');
+        Schema::drop('topic_views');
     }
 }

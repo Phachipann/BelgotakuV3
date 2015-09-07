@@ -8,28 +8,24 @@
 		<table class="table">
 			@foreach($forum->topics as $topic)
 				<tr>
-					<td class="unread">
+					<td class="unread col-md-1">
 						<span class="glyphicon glyphicon-comment"></span>
 					</td>
 
-					<td class="content">
+					<td class="content col-md-6">
 						<h4><a href="{{URL::route('forum.topic.show', $topic->slug)}}">{{$topic->subject}}</a></h4>
 						Débuté par {{$topic->user->name}}, {{$topic->created_at->format('d/m/Y')}}
 					</td>
 
-					<td class="preview">
-						
-					</td>
-
-					<td class="statistics">
+					<td class="statistics col-md-2">
 						<ul class="list-unstyled">
 							<li>{{count($topic->replies)}} réponses</li>
-							<li>vues</li>
+							<li>{{$topic->view->views}} vues</li>
 						</ul>
 					</td>
 
-					<td class="lastpost">
-						{{$topic->lastUser->name}}
+					<td class="lastpost col-md-3">
+						{{$topic->last_user}}
 					</td>
 				</tr>
 			@endforeach

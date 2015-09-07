@@ -18,12 +18,9 @@ class Forum extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('description');
-            $table->string('priority');
-            $table->integer('sections_id')->unsigned()->nullable();
+            $table->integer('priority')->nullable();
+            $table->integer('sections_id')->nullable();
             $table->timestamps();
-
-            $table->foreign('sections_id')
-                ->references('id')->on('sections');
         });
 
         //Crée la table topics
@@ -31,33 +28,22 @@ class Forum extends Migration
             $table->increments('id');
             $table->string('subject');
             $table->string('slug');
-            $table->integer('users_id')->unsigned();
-            $table->integer('sections_id')->unsigned();
-            $table->integer('last_users_id');
-            $table->integer('last_replies_id');
-            $table->timestamps();
-
-            $table->foreign('users_id')
-                ->references('id')->on('users');
-
-            $table->foreign('sections_id')
-                ->references('id')->on('sections');            
+            $table->integer('users_id');
+            $table->integer('sections_id');
+            $table->string('last_user');
+            $table->integer('last_reply_id')->nullable();
+            $table->boolean('is_locked');
+            $table->boolean('is_pinned');
+            $table->timestamps();           
         });
 
         //Crée la table replies
         Schema::create('replies', function(Blueprint $table){
             $table->increments('id');
             $table->string('content');
-            $table->integer('topics_id')->unsigned();
-            $table->integer('users_id')->unsigned();
+            $table->integer('topics_id');
+            $table->integer('users_id');
             $table->timestamps();
-
-            $table->foreign('topics_id')
-                ->references('id')->on('topics')
-                ->onDelete('cascade');
-
-            $table->foreign('users_id')
-                ->references('id')->on('users');
         });
     }
 

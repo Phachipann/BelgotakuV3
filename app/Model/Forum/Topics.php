@@ -11,7 +11,7 @@ class Topics extends Model
 	*/
 	protected $table = 'topics';
 
-	protected $fillable = ['subject', 'slug', 'users_id', 'sections_id', 'last_users_id', 'last_replies_id'];
+	protected $fillable = ['subject', 'slug', 'users_id', 'sections_id', 'last_user', 'last_replies_id'];
 
 	/**
 	* Relation topics à la table replies
@@ -28,7 +28,7 @@ class Topics extends Model
 		return $this->belongsTo('App\Model\Forum\Sections', 'sections_id', 'id');
 	}
 
-	function lastUser(){
-		return $this->belongsTo('App\Model\User', 'last_users_id');
+	function view(){
+		return $this->hasOne('App\Model\Forum\Views', 'topics_id');
 	}
 }

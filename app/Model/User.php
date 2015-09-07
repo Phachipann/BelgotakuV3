@@ -48,4 +48,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     function badges(){
         return $this->belongsToMany('App\Model\Badges', 'users_badges', 'users_id', 'badges_id');
     }
+
+    function pm(){
+        return $this->belongsToMany('App\Model\pm\PrivateMessage', 'pm_destination', 'users_id', 'pm_id');
+    }
 }

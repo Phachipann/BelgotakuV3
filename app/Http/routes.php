@@ -27,6 +27,8 @@ Route::get('about', ['as'=>'about', 'uses'=>'WebSiteController@about']);
 Route::get('contact', ['as'=>'contact', 'uses'=>'WebSiteController@contact']);
 
 Route::resource('messages', 'PMController');
+Route::post('messages/{messages}/post', ['as'=>'messages.reply', 'uses'=>'PMController@reply']);
+
 Route::get('getUsers', 'PMController@getUsers');
 
 //Profil page

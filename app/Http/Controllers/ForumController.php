@@ -6,10 +6,13 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 use App\Model\Forum\Sections;
 use App\Model\Forum\Topics;
 use App\Model\Forum\Replies;
+use App\Model\Forum\Views;
+use App\Model\Forum\UserRead;
 use Auth;
 use URL;
 use Validator;
@@ -38,6 +41,7 @@ class ForumController extends Controller
 			$copy = $copy->up;
 			array_unshift($breadcrumbs, $copy);
 		} 
+
 		return view('forum.section.show')
 			->with('breadcrumbs', $breadcrumbs)
 			->with('forum', $this->section);
@@ -46,8 +50,9 @@ class ForumController extends Controller
 	/**
 	* Crée un nouveau topic(get)
 	*/
-	function createTopicGet(){
-		return view('forum.topics.create');
+	function createTopicGet($section){
+		return view('forum.topics.create')
+			->with('section', $section);
 	}
 
 	/**
@@ -74,7 +79,7 @@ class ForumController extends Controller
 			'slug'				=>	str_slug($lastId.' '.$request->subject),
 			'users_id'			=>	Auth::user()->id,
 			'sections_id'		=>	Sections::where('slug', $section)->first()->id,
-			'last_users_id'		=>	Auth::user()->id
+			'last_user'			=>	Auth::user()->name
 		]);
 
 		$reply = Replies::create([
@@ -83,9 +88,21 @@ class ForumController extends Controller
 			'users_id'			=>	Auth::user()->id
 		]);
 
+		//Affiche le nombre de vue
+		Views::create([
+			'topics_id'	=>	$topic->id,
+			'views'		=>	1
+		]);
+
+		//Mets à jour UserRead
+		UserRead::create([
+			'users_id'	=>	Auth::user()->id,
+			'topics_id'	=>	$topic->id
+		]);
+
 		//Mets à jour la table topic (dernier message envoyé)
 		$change = Topics::find($topic->id);
-		$change->last_replies_id = $reply->id;
+		$change->last_reply_id = $reply->id;
 		$change->save();
 		return redirect()->route('forum.section.show', $section);
 	}
@@ -94,7 +111,22 @@ class ForumController extends Controller
 	* Affiche le topic
 	*/
 	function showTopic($topic){
+		//Récupère le topic
 		$this->topic = Topics::where('slug', $topic)->first();
+
+		//Mets à jour le nombre de vues
+		$view = Views::where('topics_id', $this->topic->id)->first();
+		$view->views++;
+		$view->save();
+
+		if(Auth::check()){
+			//Mets à jour UserRead
+			$read = UserRead::firstOrCreate([
+				'users_id'	=>	Auth::user()->id,
+				'topics_id'	=>	$this->topic->id]);
+			$read->updated_at = Carbon::now();
+			$read->save();
+		}
 		
 		//Crée le breadcrumb
 		$copy = $this->topic->section;
@@ -122,8 +154,8 @@ class ForumController extends Controller
 		]);
 
 		//Mets à jour le dernier message envoyé
-		$idTopic->last_replies_id = $reply->id;
-		$idTopic->last_users_id = Auth::user()->id;
+		$idTopic->last_reply_id = $reply->id;
+		$idTopic->last_user = Auth::user()->name;
 		$idTopic->save();
 		return back();
 	}

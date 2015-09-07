@@ -10,7 +10,12 @@
 		<!-- Affiche les différentes sections du forum -->
 		@foreach($forums as $forum)
 			<div class="panel panel-primary">
-				<div class="panel-heading"><a href="forum/section/{{$forum->slug}}">{{$forum->name}}</a></div>
+				<div class="panel-heading">
+					<h2 class="panel-title">
+						<a href="forum/section/{{$forum->slug}}">{{$forum->name}}</a>
+					</h2>
+				</div>
+				
 				@include('forum.templates.subForum')
 			</div>
 		@endforeach

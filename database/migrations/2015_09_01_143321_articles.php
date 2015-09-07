@@ -17,25 +17,17 @@ class Articles extends Migration
             $table->string('title');
             $table->string('slug');
             $table->string('content');
-            $table->integer('users_id')->unsigned();
+            $table->integer('users_id');
             $table->timestamps();
-
-            $table->foreign('users_id')
-                ->references('id')->on('users');
         });
 
         Schema::create('articles_comments', function(Blueprint $table){
             $table->increments('id');
             $table->string('comment');
-            $table->integer('users_id')->unsigned();
-            $table->integer('articles_id')->unsigned();
+            $table->string('user');
+            $table->integer('users_id');
+            $table->integer('articles_id');
             $table->timestamps();
-
-            $table->foreign('users_id')
-                ->references('id')->on('users');
-
-            $table->foreign('articles_id')
-                ->references('id')->on('articles');
         });
     }
 
@@ -46,7 +38,8 @@ class Articles extends Migration
      */
     public function down()
     {
+        Schema::drop('articles_comments'); 
         Schema::drop('articles');
-        Schema::drop('articles_comments');        
+               
     }
 }
